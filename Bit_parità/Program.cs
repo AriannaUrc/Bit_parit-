@@ -77,6 +77,7 @@ namespace ConsoleApp1
             string parola;
             int[,] tabella = new int[7, lunghezza];
             int[,] tabellaMod = new int[7, lunghezza];
+            bool[,] Errori = new bool[7, lunghezza];
 
             int[] PosizioniDis = new int[7 * lunghezza];
             int max = 7 * lunghezza;
@@ -88,6 +89,9 @@ namespace ConsoleApp1
 
             int[] bit_paritaOr = new int[lunghezza];
             int[] bit_paritaVert = new int[lunghezza];
+
+
+            tabella = tabellaMod;
 
             Console.WriteLine("Inserire una parola di 7 caratteri: ");
 
@@ -143,6 +147,8 @@ namespace ConsoleApp1
                 x = PosizioniDis[temp] % 7;
                 y = PosizioniDis[temp] / 7;
 
+                Errori[x, y] = true;
+
                 if (tabellaMod[x, y] == 0)
                 {
                     tabellaMod[x, y] = 1;
@@ -166,12 +172,19 @@ namespace ConsoleApp1
 
             Console.WriteLine("\n\n\n");
 
-            //scrittura tabella
+            //scrittura tabella modificata
             for (int i = 0; i < lunghezza; i++)
             {
                 for (int j = 0; j < 7; j++)
                 {
+                    if (Errori[i, j] == true)
+                    {
+                        Console.BackgroundColor = ConsoleColor.Red;
+                    }
+
                     Console.Write(tabellaMod[i, j] + "\t");
+
+                    Console.BackgroundColor= ConsoleColor.Black;
                 }
                 //call e stampa bit di parità orizzontale
                 Console.Write(bit_paritaOr[i] + "\n");
