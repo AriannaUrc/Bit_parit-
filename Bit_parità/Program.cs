@@ -57,12 +57,7 @@ internal class Program
 
             return bit_parità;
         }
-
-        public static void visualizzazione(int[] binario)
-        {
-            Console.WriteLine("Inserire una parola di 7 caratteri: ");
-
-        }
+      
 
         static void Main(string[] args)
         {
@@ -85,8 +80,9 @@ internal class Program
             }
 
             int[] bit_paritaOr = new int[7];
-
+            int[] bit_paritaOrMod = new int[7];
             int[] bit_paritaVert = new int[lunghezza];
+            int[] bit_paritaVertMod = new int[lunghezza];
 
 bool[] colonne = new bool[7];
 
@@ -104,6 +100,20 @@ bool[] colonne = new bool[7];
                 Console.WriteLine("La parola inserita non è di una lunghezza adeguata\nInserire una nuova parola: ");
                 parola = Console.ReadLine();
             }
+
+          Console.WriteLine("Inserire La percentuale di errori desiderata: ");
+
+            percentErrori = int.Parse(Console.ReadLine());
+
+            while (percentErrori<0 | percentErrori>100)
+            {
+                Console.WriteLine("La percentuale non è valida. Inserici una percentuale valida: ");
+                percentErrori = int.Parse(Console.ReadLine());
+            }
+
+          Console.WriteLine("\n\n");
+          
+            
 
 
             //calcolo del valore in ASCII e binario e riempimento tabella
@@ -149,8 +159,6 @@ bool[] colonne = new bool[7];
                 x = PosizioniDis[temp] % 7;
                 y = PosizioniDis[temp] / 7;
 
-              righe[y]=true;
-              colonne[x]=true;
                 Errori[x, y] = true;
 
                 if (tabellaMod[x, y] == 0)
@@ -174,7 +182,7 @@ bool[] colonne = new bool[7];
                 
             }
 
-            Console.WriteLine("\n\n\n");
+            Console.WriteLine("\n\n\nEcco gli errori generati\n");
 
             //scrittura tabella modificata
             for (int i = 0; i < lunghezza; i++)
@@ -202,30 +210,65 @@ bool[] colonne = new bool[7];
 
 
 
-Console.WriteLine("\n");
+Console.WriteLine("\n\n Ecco gli errori individuati dal bit di parità:\n");
           
+//ricalcola il bit di parità
+          bit_paritaOrMod = parityOr(tabellaMod);
+          bit_paritaVertMod = parityVert(tabellaMod);
 
+          //se il bit di parità è diverso considera la colonna o righa rispettiva come errata
+          for (int i = 0; i < 7; i++)
+          {
+            if (bit_paritaOrMod[i]!=bit_paritaOr[i])
+            {
+              righe[i]=true;
+            }
+          }
+
+          for (int i = 0; i < lunghezza; i++)
+          {
+            if (bit_paritaVertMod[i]!=bit_paritaVert[i])
+            {
+              colonne[i]=true;
+            }
+          }
+          
+          
           for (int i = 0; i < lunghezza; i++)
             {
                 for (int j = 0; j < 7; j++)
                 {
-                    if (righe[i] == true ^ colonne[j]==true)
+                    if (righe[i] == true | colonne[j]==true)
                     {
                         Console.BackgroundColor = ConsoleColor.Red;
                     }
 
-                    Console.Write(tabellaMod[i, j] + "\t");
+                    Console.Write(" "+tabellaMod[i, j] + " ");
 
                     Console.BackgroundColor= ConsoleColor.Black;
                 }
+              
+              if (righe[i] == true)
+                    {
+                        Console.BackgroundColor = ConsoleColor.Red;
+                    }
                 //call e stampa bit di parità orizzontale
-                Console.Write(bit_paritaOr[i] + "\n");
+                Console.Write(" "+bit_paritaOr[i]);
+              Console.BackgroundColor= ConsoleColor.Black;
+              Console.Write("\n");
             }
+
+          
 
             //call e stampa bit di parità verticale
             for (int i = 0; i < 7; i++)
             {
-                Console.Write(bit_paritaVert[i] + "\t");
+              if (colonne[i]==true)
+                    {
+                        Console.BackgroundColor = ConsoleColor.Red;
+                    }
+                Console.Write(" "+bit_paritaVert[i] + " ");
+              Console.BackgroundColor= ConsoleColor.Black;
             }
         }
     }
