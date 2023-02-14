@@ -1,13 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-namespace ConsoleApp1
-{
-    internal class Program
+internal class Program
     {
         public static int[] parityOr(int[,] binario)
         {
@@ -87,8 +84,13 @@ namespace ConsoleApp1
                 PosizioniDis[i] = i;
             }
 
-            int[] bit_paritaOr = new int[lunghezza];
+            int[] bit_paritaOr = new int[7];
+
             int[] bit_paritaVert = new int[lunghezza];
+
+bool[] colonne = new bool[7];
+
+            bool[] righe = new bool[lunghezza];
 
 
             tabella = tabellaMod;
@@ -147,6 +149,8 @@ namespace ConsoleApp1
                 x = PosizioniDis[temp] % 7;
                 y = PosizioniDis[temp] / 7;
 
+              righe[y]=true;
+              colonne[x]=true;
                 Errori[x, y] = true;
 
                 if (tabellaMod[x, y] == 0)
@@ -195,6 +199,33 @@ namespace ConsoleApp1
             {
                 Console.Write(bit_paritaVert[i] + "\t");
             }
+
+
+
+Console.WriteLine("\n");
+          
+
+          for (int i = 0; i < lunghezza; i++)
+            {
+                for (int j = 0; j < 7; j++)
+                {
+                    if (righe[i] == true ^ colonne[j]==true)
+                    {
+                        Console.BackgroundColor = ConsoleColor.Red;
+                    }
+
+                    Console.Write(tabellaMod[i, j] + "\t");
+
+                    Console.BackgroundColor= ConsoleColor.Black;
+                }
+                //call e stampa bit di parità orizzontale
+                Console.Write(bit_paritaOr[i] + "\n");
+            }
+
+            //call e stampa bit di parità verticale
+            for (int i = 0; i < 7; i++)
+            {
+                Console.Write(bit_paritaVert[i] + "\t");
+            }
         }
     }
-}
